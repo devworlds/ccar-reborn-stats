@@ -42,7 +42,7 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
-            margin-top: 0px; /* Adicione margem para evitar sobreposição com a barra de navegação */
+            margin-top: 0px;
         }
 
         #logoContainer img {
@@ -91,7 +91,6 @@
 
     <script>
         const socket = new WebSocket("ws://0.tcp.sa.ngrok.io:15938/claim");
-        // Função para manipular as mensagens recebidas do servidor
         socket.onmessage = function(event) {
             try {
                 const jsonData = JSON.parse(event.data);
@@ -116,21 +115,18 @@
             }
         };
 
-        // Função para lidar com erros de conexão
         socket.onerror = function(error) {
             console.error("Erro na conexão WebSocket:", error);
         };
 
-        // Função para lidar com o fechamento da conexão
         socket.onclose = function(event) {
             if (event.wasClean) {
                 console.log(`Conexão fechada limpidamente, código=${event.code}, motivo=${event.reason}`);
             } else {
-                console.error("Conexão quebrada"); // por exemplo, o servidor caiu
+                console.error("Conexão quebrada");
             }
         };
-
-        // Função para lidar com a abertura da conexão
+        
         socket.onopen = function(event) {
             console.log("Conexão WebSocket aberta:", event);
         };
