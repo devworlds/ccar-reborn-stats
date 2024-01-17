@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCAR Reborn Stats</title>
+    <style>
+        body {
+            background-color: #4dcabb;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 0vh;
+        }
+
+        nav {
+            background-color: #FFD700;
+            overflow: hidden;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav a {
+            float: none;
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        #container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            margin-top: 0px; /* Adicione margem para evitar sobreposição com a barra de navegação */
+        }
+
+        #logoContainer img {
+            max-width: 35%;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        #sonecaContainer img {
+            max-width: 30%;
+        }
+
+        #claimInfo {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#">Contract: 0x19098aaA0433B465e47e07f48a1E1c4bD622ce86</a>
+    </nav>
+
+    <div class="container" id="logoContainer">
+        <img src="./img/logo.png" alt="CCAR Reborn Logo">
+    </div>
+
+    <div id="container">
+        <h1>Status</h1>
+        <div id="claimInfo">
+            <h2><strong>Último Saque: </strong></h2>
+            <p>Endereço do Contrato: <span id="contractAddress"></span></p>
+            <p>Endereço de Retirada: <span id="withdrawAddress"></span></p>
+            <p>Valor de Saque: <span id="withdrawValue"></span></p>
+            <p>Endereço do Contrato Fee: <span id="feeContract"></span></p>
+            <p>Valor de Fee: <span id="feeValue"></span></p>
+            <p>Hash da Transação: <span id="TxHash"></span></p>
+            <p>Hora: <span id="Time"></span></p>
+        </div>
+        <div id="sonecaContainer">
+            <img src="./img/sticker.png" alt="soneca">
+        </div>
+    </div>
+
+    <script>
+        const socket = new WebSocket("ws://localhost:8080/claim");
+        // Função para manipular as mensagens recebidas do servidor
+        socket.onmessage = function(event) {
+            try {
+                const jsonData = JSON.parse(event.data);
+                const contractAddressElement = document.getElementById("contractAddress");
+                const withdrawAddressElement = document.getElementById("withdrawAddress");
+                const feeContractElement = document.getElementById("feeContract");
+                const feeValueElement = document.getElementById("feeValue");
+                const withdrawValueElement = document.getElementById("withdrawValue");
+                const TimeElement = document.getElementById("Time");
+                const TxHashElement = document.getElementById("TxHash");
+
+                contractAddressElement.textContent = jsonData.ContractAddress || "N/A";
+                withdrawAddressElement.textContent = jsonData.WithdrawAddress || "N/A";
+                feeContractElement.textContent = jsonData.FeeContract || "N/A";
+                feeValueElement.textContent = jsonData.FeeValue ? jsonData.FeeValue.toString() : "N/A";
+                withdrawValueElement.textContent = jsonData.WithdrawValue ? jsonData.WithdrawValue.toString() : "N/A";
+                TimeElement.textContent = jsonData.Time || "N/A";
+                TxHashElement.textContent = "https://bscscan.com/tx/"+jsonData.TxHash || "N/A";
+
+            } catch (error) {
+                console.error("Erro ao analisar JSON:", error);
+            }
+        };
+
+        // Função para lidar com erros de conexão
+        socket.onerror = function(error) {
+            console.error("Erro na conexão WebSocket:", error);
+        };
+
+        // Função para lidar com o fechamento da conexão
+        socket.onclose = function(event) {
+            if (event.wasClean) {
+                console.log(`Conexão fechada limpidamente, código=${event.code}, motivo=${event.reason}`);
+            } else {
+                console.error("Conexão quebrada"); // por exemplo, o servidor caiu
+            }
+        };
+
+        // Função para lidar com a abertura da conexão
+        socket.onopen = function(event) {
+            console.log("Conexão WebSocket aberta:", event);
+        };
+    </script>
+</body>
+</html>
