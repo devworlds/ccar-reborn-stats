@@ -90,7 +90,7 @@
     </div>
 
     <script>
-        const socket = new WebSocket("ws://0.tcp.sa.ngrok.io:15938/claim");
+        const socket = new WebSocket("wss://0.tcp.sa.ngrok.io:15938/claim");
         socket.onmessage = function(event) {
             try {
                 const jsonData = JSON.parse(event.data);
