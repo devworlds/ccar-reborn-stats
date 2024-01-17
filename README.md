@@ -1,3 +1,5 @@
+INFORMAÇÕES SIMPLIFICADAS DE JOGOS NFTS
+
 Projeto para trazer transparências para os brs que estão entrando nos projetos NFT.
 
 feature:
