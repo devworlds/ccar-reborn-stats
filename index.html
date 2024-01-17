@@ -90,7 +90,7 @@
     </div>
 
     <script>
-        const socket = new WebSocket("ws://localhost:8080/claim");
+        const socket = new WebSocket("ws://0.tcp.sa.ngrok.io:15938/claim");
         // Função para manipular as mensagens recebidas do servidor
         socket.onmessage = function(event) {
             try {
